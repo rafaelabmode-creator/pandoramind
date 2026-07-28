@@ -91,7 +91,7 @@ export const courses: Course[] = [
       "Bibliografia comentada",
       "Gravações da parte teórica por 1 ano",
       "Grupo de discussão",
-      "Certificado de 24h emitido pelo Instituto MetaCognitiva",
+      "Certificado de 24h",
     ],
     ficha: [
       { label: "Formato", value: "100% online ao vivo (Google Meet)" },
@@ -105,7 +105,7 @@ export const courses: Course[] = [
         label: "Gravações",
         value: "Parte teórica por 1 ano (supervisão não é gravada, por sigilo ético)",
       },
-      { label: "Certificação", value: "24h, emitida pelo Instituto MetaCognitiva" },
+      { label: "Certificação", value: "Certificado de 24h" },
     ],
     priceLots: [
       { label: "1º Lote", price: "R$ 797,00", deadline: "até 15/08/2026" },
