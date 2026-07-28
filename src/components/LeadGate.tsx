@@ -142,30 +142,32 @@ export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
             />
           </div>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-brand-50 p-3">
-            <input
-              type="checkbox"
-              checked={newsletter}
-              onChange={(e) => setNewsletter(e.target.checked)}
-              className="mt-0.5 h-4 w-4 accent-brand-600"
-            />
-            <span className="text-sm text-ink-muted">
-              Quero receber a newsletter e novidades sobre os cursos da PandoraMind.
-            </span>
-          </label>
+          <div className="space-y-3 rounded-xl bg-brand-50 p-4">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={newsletter}
+                onChange={(e) => setNewsletter(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-brand-600"
+              />
+              <span className="text-sm leading-relaxed text-ink-muted">
+                Quero receber a newsletter e novidades sobre os cursos da PandoraMind.
+              </span>
+            </label>
 
-          <label className="flex cursor-pointer items-start gap-3">
-            <input
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="mt-0.5 h-4 w-4 accent-brand-600"
-            />
-            <span className="text-xs leading-relaxed text-ink-soft">
-              Concordo que a PandoraMind utilize meus dados para contato e para liberar o
-              acesso ao assistente, conforme a LGPD. *
-            </span>
-          </label>
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-brand-600"
+              />
+              <span className="text-sm leading-relaxed text-ink-muted">
+                Concordo que a PandoraMind utilize meus dados para contato e para liberar o acesso
+                ao assistente, conforme a LGPD. *
+              </span>
+            </label>
+          </div>
 
           {error && (
             <p className="rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-600">{error}</p>
