@@ -11,9 +11,11 @@ export const site = {
   whatsapp: "5516981878887",
   email: "contato@pandoramind.com.br",
   instagram: "https://instagram.com/",
-  // Link de assinatura do assistente (ex.: uma assinatura recorrente no Asaas).
+  // Link de assinatura do assistente (assinatura recorrente no Asaas).
   // Enquanto estiver vazio, o botão "Assinar" abre o WhatsApp.
-  subscriptionUrl: "",
+  subscriptionUrl: "https://www.asaas.com/c/889fsr7njmvey3qr",
+  // Preço da assinatura do assistente (exibido no painel de demonstração).
+  assistantPrice: "R$ 19,90",
 };
 
 export function whatsappLink(message: string): string {

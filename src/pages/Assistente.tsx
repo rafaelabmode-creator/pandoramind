@@ -6,7 +6,7 @@ import { LeadGate } from "../components/LeadGate";
 import { streamChat, type ChatMessage } from "../lib/chat";
 import { hasAccess, getSavedName } from "../lib/lead";
 import { FREE_LIMIT, getUsage, incrementUsage } from "../lib/usage";
-import { subscriptionLink } from "../data/site";
+import { site, subscriptionLink } from "../data/site";
 import { cn } from "../lib/cn";
 
 const SUGGESTIONS = [
@@ -224,7 +224,7 @@ export function Assistente() {
                   rel="noopener noreferrer"
                   className="btn-primary"
                 >
-                  <Sparkles className="h-5 w-5" /> Assinar acesso ilimitado
+                  <Sparkles className="h-5 w-5" /> Assinar por {site.assistantPrice}/mês
                 </a>
                 <Link to="/cursos" className="btn-outline">
                   <GraduationCap className="h-5 w-5" /> Participar de um curso
