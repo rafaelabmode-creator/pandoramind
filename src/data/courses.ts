@@ -41,6 +41,9 @@ export interface Course {
   priceNote?: string; // observação sobre preço
   paymentConditions?: string; // condições de pagamento
 
+  // Link de checkout (ex.: Asaas). Se preenchido, o botão leva direto ao
+  // pagamento. Se vazio (curso em lista de espera), o botão abre o WhatsApp.
+  checkoutUrl?: string;
   ctaLabel: string;
 }
 
@@ -114,6 +117,7 @@ export const courses: Course[] = [
     ],
     paymentConditions:
       "Parcelamento em até 10x sem juros no cartão · pagamento via Asaas · vagas limitadas.",
+    checkoutUrl: "https://www.asaas.com/c/4vxo2zmhapnwc4bz",
     ctaLabel: "Quero me inscrever",
   },
 

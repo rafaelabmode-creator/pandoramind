@@ -18,9 +18,13 @@ export function CourseDetail() {
 
   if (!course) return <NotFound />;
 
-  const cta = whatsappLink(
-    `Olá! Tenho interesse no curso "${course.title}". Pode me passar mais informações?`,
-  );
+  // Se o curso tem link de checkout (turma aberta), o botão leva ao pagamento.
+  // Senão (lista de espera), abre o WhatsApp para captar o interesse.
+  const cta =
+    course.checkoutUrl ??
+    whatsappLink(
+      `Olá! Tenho interesse no curso "${course.title}". Pode me passar mais informações?`,
+    );
 
   return (
     <article>
