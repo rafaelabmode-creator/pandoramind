@@ -10,7 +10,9 @@ export type Audience = "psicologos" | "todos";
 
 export interface PriceLot {
   label: string; // ex.: "1º Lote"
-  price: string; // ex.: "R$ 797,00"
+  price: string; // texto de exibição à vista, ex.: "R$ 797,00"
+  amount?: number; // valor numérico em reais (ex.: 797) — habilita o cálculo da parcela
+  compareAtAmount?: number; // valor "cheio" para mostrar desconto (ex.: 897)
   deadline?: string; // ex.: "até 15/08/2026"
 }
 
@@ -36,6 +38,7 @@ export interface Course {
   targetAudience: string[]; // "Para quem é"
   includes?: string[]; // "O que está incluído"
   ficha: FichaItem[]; // ficha técnica
+  installmentsMax?: number; // parcelamento máximo no cartão (ex.: 10)
 
   modules?: { title: string; description: string }[]; // programa do curso (módulos)
   faq?: { q: string; a: string }[]; // perguntas frequentes
@@ -115,10 +118,11 @@ export const courses: Course[] = [
       },
       { label: "Certificação", value: "Certificado de 24h" },
     ],
+    installmentsMax: 10,
     priceLots: [
-      { label: "1º Lote", price: "R$ 797,00", deadline: "até 15/08/2026" },
-      { label: "2º Lote", price: "R$ 847,00", deadline: "até 31/08/2026" },
-      { label: "3º Lote", price: "R$ 897,00", deadline: "até 11/09/2026" },
+      { label: "1º Lote", price: "R$ 797,00", amount: 797, compareAtAmount: 897, deadline: "até 15/08/2026" },
+      { label: "2º Lote", price: "R$ 847,00", amount: 847, compareAtAmount: 897, deadline: "até 31/08/2026" },
+      { label: "3º Lote", price: "R$ 897,00", amount: 897, deadline: "até 11/09/2026" },
     ],
     paymentConditions:
       "Parcelamento em até 10x sem juros no cartão · pagamento via Asaas · vagas limitadas.",
@@ -171,7 +175,8 @@ export const courses: Course[] = [
       { label: "Metodologia", value: "Exposição teórica + apostila + estudo de caso com role-play" },
       { label: "Certificação", value: "12h — material permanente (apostilas)" },
     ],
-    priceLots: [{ label: "Investimento", price: "R$ 597,00" }],
+    installmentsMax: 12,
+    priceLots: [{ label: "Investimento", price: "R$ 597,00", amount: 597 }],
     priceNote:
       "Lote promocional de lançamento nas primeiras vagas. As 12 horas com role-play e discussão de casos justificam esse patamar no mercado de educação continuada em psicologia.",
     paymentConditions: "Parcelamento em até 12x.",
@@ -187,7 +192,7 @@ export const courses: Course[] = [
     subtitle: "Domine seus pensamentos, transforme suas emoções e recupere o controle da sua vida",
     audience: "todos",
     audienceLabel: "Para todos",
-    status: "inscricoes-abertas",
+    status: "em-breve",
     featured: true,
     emoji: "✍️",
     shortDescription:
@@ -273,12 +278,14 @@ export const courses: Course[] = [
       "Garantia de 7 dias: se sentir que o curso não é para você, devolvemos 100% do valor, sem burocracia.",
     disclaimer:
       "Este é um curso educativo e de desenvolvimento pessoal, com base científica. Ele não substitui psicoterapia nem acompanhamento profissional. Se você estiver em sofrimento intenso, procure um(a) psicólogo(a); em situações de crise, ligue para o CVV (188).",
+    installmentsMax: 10,
     priceLots: [
-      { label: "Promocional", price: "R$ 297,00", deadline: "oferta de lançamento" },
-      { label: "Valor normal", price: "R$ 397,00" },
+      { label: "Promocional", price: "R$ 297,00", amount: 297, compareAtAmount: 397, deadline: "oferta de lançamento" },
+      { label: "Valor normal", price: "R$ 397,00", amount: 397 },
     ],
     priceNote: "Condição promocional de lançamento por tempo limitado.",
     paymentConditions: "Parcelamento no cartão · pagamento via Asaas.",
+    // Guardado para quando o curso for gravado e as inscrições abrirem:
     checkoutUrl: "https://www.asaas.com/c/c3akykrezir3sm9o",
     faq: [
       {
@@ -302,7 +309,7 @@ export const courses: Course[] = [
         a: "Você tem 7 dias de garantia. Se sentir que não é para você, é só solicitar o reembolso e devolvemos 100% do valor.",
       },
     ],
-    ctaLabel: "Quero me inscrever",
+    ctaLabel: "Quero ser avisado(a)",
   },
 ];
 

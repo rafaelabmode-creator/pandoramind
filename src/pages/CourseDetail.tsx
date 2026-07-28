@@ -21,13 +21,20 @@ export function CourseDetail() {
 
   if (!course) return <NotFound />;
 
-  // Se o curso tem link de checkout (turma aberta), o botão leva ao pagamento.
-  // Senão (lista de espera), abre o WhatsApp para captar o interesse.
-  const cta =
-    course.checkoutUrl ??
-    whatsappLink(
-      `Olá! Tenho interesse no curso "${course.title}". Pode me passar mais informações?`,
-    );
+  const isComingSoon = course.status === "em-breve";
+
+  // Formata um valor em reais (ex.: 79.7 → "R$ 79,70").
+  const brl = (v: number) =>
+    v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  // "Em breve": botão de aviso. Com checkout: leva ao pagamento.
+  // Sem checkout (lista de espera): WhatsApp de interesse.
+  const cta = isComingSoon
+    ? whatsappLink(`Olá! Quero ser avisado(a) quando o curso "${course.title}" abrir. 😊`)
+    : (course.checkoutUrl ??
+      whatsappLink(
+        `Olá! Tenho interesse no curso "${course.title}". Pode me passar mais informações?`,
+      ));
 
   return (
     <article>
@@ -224,36 +231,82 @@ export function CourseDetail() {
             </div>
 
             {/* Preço */}
-            {course.priceLots && course.priceLots.length > 0 && (
+            {isComingSoon ? (
               <div className="border-t border-brand-100 pt-5">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
-                  Investimento
-                </h3>
-                <div className="mt-3 space-y-2">
-                  {course.priceLots.map((lot) => (
-                    <div
-                      key={lot.label}
-                      className="flex items-center justify-between rounded-xl bg-brand-50 px-4 py-3"
-                    >
-                      <div>
-                        <p className="text-sm font-semibold text-ink">{lot.label}</p>
-                        {lot.deadline && (
-                          <p className="text-xs text-ink-soft">{lot.deadline}</p>
-                        )}
-                      </div>
-                      <span className="text-lg font-extrabold text-brand-700">{lot.price}</span>
-                    </div>
-                  ))}
-                </div>
-                {course.paymentConditions && (
-                  <p className="mt-3 text-xs leading-relaxed text-ink-muted">
-                    {course.paymentConditions}
+                <div className="rounded-xl bg-brand-50 px-4 py-4 text-center">
+                  <p className="text-sm font-bold uppercase tracking-wide text-brand-700">
+                    Em breve
                   </p>
-                )}
-                {course.priceNote && (
-                  <p className="mt-2 text-xs leading-relaxed text-ink-soft">{course.priceNote}</p>
-                )}
+                  <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+                    As inscrições abrem em breve. Deixe seu contato para ser avisado(a) em primeira
+                    mão. 💜
+                  </p>
+                </div>
               </div>
+            ) : (
+              course.priceLots &&
+              course.priceLots.length > 0 && (
+                <div className="border-t border-brand-100 pt-5">
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-brand-700">
+                    Investimento
+                  </h3>
+                  <div className="mt-3 space-y-2">
+                    {course.priceLots.map((lot) => {
+                      const hasDiscount =
+                        lot.amount != null &&
+                        lot.compareAtAmount != null &&
+                        lot.compareAtAmount > lot.amount;
+                      const pct = hasDiscount
+                        ? Math.round(((lot.compareAtAmount! - lot.amount!) / lot.compareAtAmount!) * 100)
+                        : 0;
+                      return (
+                        <div key={lot.label} className="rounded-xl bg-brand-50 px-4 py-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="text-sm font-semibold text-ink">{lot.label}</p>
+                              {lot.deadline && (
+                                <p className="text-xs text-ink-soft">{lot.deadline}</p>
+                              )}
+                            </div>
+                            {hasDiscount && (
+                              <span className="chip bg-emerald-100 text-emerald-700">
+                                −{pct}% · economize {brl(lot.compareAtAmount! - lot.amount!)}
+                              </span>
+                            )}
+                          </div>
+
+                          {lot.amount != null && course.installmentsMax ? (
+                            <div className="mt-2">
+                              {hasDiscount && (
+                                <span className="text-sm text-ink-soft line-through">
+                                  {brl(lot.compareAtAmount!)}
+                                </span>
+                              )}
+                              <p className="leading-tight">
+                                <span className="text-2xl font-extrabold text-brand-700">
+                                  {course.installmentsMax}x de{" "}
+                                  {brl(lot.amount / course.installmentsMax)}
+                                </span>
+                              </p>
+                              <p className="text-sm text-ink-soft">ou {brl(lot.amount)} à vista</p>
+                            </div>
+                          ) : (
+                            <p className="mt-1 text-lg font-extrabold text-brand-700">{lot.price}</p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {course.paymentConditions && (
+                    <p className="mt-3 text-xs leading-relaxed text-ink-muted">
+                      {course.paymentConditions}
+                    </p>
+                  )}
+                  {course.priceNote && (
+                    <p className="mt-2 text-xs leading-relaxed text-ink-soft">{course.priceNote}</p>
+                  )}
+                </div>
+              )
             )}
 
             <a
