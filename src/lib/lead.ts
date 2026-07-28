@@ -8,7 +8,7 @@ export type Perfil = "psicologo" | "estudante" | "curioso";
 
 export interface Lead {
   nome: string;
-  perfil: Perfil;
+  perfil: string; // rótulo legível (ex.: "Profissional da Psicologia")
   telefone: string;
   email: string;
   motivo: string;

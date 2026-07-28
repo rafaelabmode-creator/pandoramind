@@ -5,9 +5,9 @@ import { submitLead, saveAccess, type Lead, type Perfil } from "../lib/lead";
 import { cn } from "../lib/cn";
 
 const perfis: { value: Perfil; label: string }[] = [
-  { value: "psicologo", label: "Psicóloga(o)" },
+  { value: "psicologo", label: "Profissional da Psicologia" },
   { value: "estudante", label: "Estudante de Psicologia" },
-  { value: "curioso", label: "Curiosa(o) pelo tema" },
+  { value: "curioso", label: "Pessoa curiosa" },
 ];
 
 export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
@@ -24,17 +24,18 @@ export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!nome.trim() || !email.trim() || !perfil) {
-      setError("Preencha nome, e-mail e seu perfil.");
+    if (!nome.trim() || !email.trim() || !perfil || !telefone.trim() || !motivo.trim()) {
+      setError("Por favor, preencha todos os campos para continuar.");
       return;
     }
     if (!consent) {
       setError("É preciso concordar com o uso dos dados para continuar.");
       return;
     }
+    const perfilLabel = perfis.find((p) => p.value === perfil)?.label ?? String(perfil);
     const lead: Lead = {
       nome: nome.trim(),
-      perfil: perfil as Perfil,
+      perfil: perfilLabel,
       telefone: telefone.trim(),
       email: email.trim(),
       motivo: motivo.trim(),
@@ -90,10 +91,10 @@ export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
                   type="button"
                   onClick={() => setPerfil(p.value)}
                   className={cn(
-                    "rounded-xl border px-3 py-2.5 text-sm font-semibold transition-colors",
+                    "rounded-xl border-2 px-3 py-2.5 text-sm font-semibold transition-colors",
                     perfil === p.value
-                      ? "border-brand-400 bg-brand-50 text-brand-700"
-                      : "border-brand-200 text-ink-muted hover:border-brand-300",
+                      ? "border-brand-500 bg-brand-100 text-brand-800 ring-1 ring-brand-300"
+                      : "border-brand-300 text-brand-700 hover:border-brand-400 hover:bg-brand-50",
                   )}
                 >
                   {p.label}
@@ -115,7 +116,7 @@ export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-semibold text-ink">Telefone</label>
+              <label className="mb-1 block text-sm font-semibold text-ink">Telefone *</label>
               <input
                 className={inputCls}
                 value={telefone}
@@ -128,10 +129,13 @@ export function LeadGate({ onUnlock }: { onUnlock: (nome: string) => void }) {
 
           <div>
             <label className="mb-1 block text-sm font-semibold text-ink">
-              O que te trouxe até aqui?
+              O que te trouxe até aqui? *
             </label>
             <textarea
-              className={cn(inputCls, "min-h-[80px] resize-y")}
+              className={cn(
+                inputCls,
+                "min-h-[96px] resize-y border-2 border-brand-300 bg-brand-50/50",
+              )}
               value={motivo}
               onChange={(e) => setMotivo(e.target.value)}
               placeholder="Conte rapidinho o que você busca (estudo, dúvida, curiosidade…)."
