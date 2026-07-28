@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Send, RotateCcw, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Send, RotateCcw, Sparkles, Lock, GraduationCap } from "lucide-react";
 import { Logo } from "../components/Logo";
 import { LeadGate } from "../components/LeadGate";
 import { streamChat, type ChatMessage } from "../lib/chat";
 import { hasAccess, getSavedName } from "../lib/lead";
+import { FREE_LIMIT, getUsage, incrementUsage } from "../lib/usage";
+import { subscriptionLink } from "../data/site";
 import { cn } from "../lib/cn";
 
 const SUGGESTIONS = [
@@ -39,6 +42,8 @@ export function Assistente() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [usage, setUsage] = useState(getUsage());
+  const [blocked, setBlocked] = useState(getUsage() >= FREE_LIMIT);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -49,6 +54,10 @@ export function Assistente() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (usage >= FREE_LIMIT) setBlocked(true);
+  }, [usage]);
 
   if (!unlocked) {
     return (
@@ -64,8 +73,13 @@ export function Assistente() {
   async function sendMessage(text: string) {
     const content = text.trim();
     if (!content || isLoading) return;
+    if (getUsage() >= FREE_LIMIT) {
+      setBlocked(true);
+      return;
+    }
     setError(null);
     setInput("");
+    setUsage(incrementUsage());
 
     const next: ChatMessage[] = [
       ...messages,
@@ -118,16 +132,24 @@ export function Assistente() {
               <p className="text-xs text-ink-soft">Assistente de estudos</p>
             </div>
           </div>
-          <button
-            onClick={() => {
-              abortRef.current?.abort();
-              setMessages([welcome(nome)]);
-              setError(null);
-            }}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50"
-          >
-            <RotateCcw className="h-4 w-4" /> <span className="hidden sm:inline">Nova conversa</span>
-          </button>
+          <div className="flex items-center gap-3">
+            {!blocked && (
+              <span className="hidden text-xs font-medium text-ink-soft sm:inline">
+                {Math.max(0, FREE_LIMIT - usage)} de {FREE_LIMIT} conversas grátis
+              </span>
+            )}
+            <button
+              onClick={() => {
+                abortRef.current?.abort();
+                setMessages([welcome(nome)]);
+                setError(null);
+              }}
+              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50"
+            >
+              <RotateCcw className="h-4 w-4" />{" "}
+              <span className="hidden sm:inline">Nova conversa</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -181,38 +203,70 @@ export function Assistente() {
         </div>
       </div>
 
-      {/* input */}
+      {/* input ou painel de demonstração encerrada */}
       <div className="border-t border-brand-100 bg-white/80 backdrop-blur">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendMessage(input);
-          }}
-          className="container-page max-w-3xl py-4"
-        >
-          <div className="flex items-end gap-2 rounded-2xl border-2 border-brand-300 bg-white p-2 shadow-card focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-100">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  sendMessage(input);
-                }
-              }}
-              rows={1}
-              placeholder="Escreva sua pergunta… (Enter para enviar)"
-              className="max-h-40 flex-1 resize-none bg-transparent px-3 py-2 text-ink outline-none placeholder:text-ink-soft"
-            />
-            <button type="submit" disabled={isLoading} className="btn-primary px-4 py-2.5">
-              <Send className="h-4 w-4" />
-            </button>
+        {blocked ? (
+          <div className="container-page max-w-3xl py-6">
+            <div className="rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-6 text-center shadow-card">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-brand-700">
+                <Lock className="h-6 w-6" />
+              </span>
+              <h3 className="mt-4 text-xl font-extrabold text-ink">Isto foi uma demonstração ✨</h3>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-muted">
+                Você usou suas {FREE_LIMIT} conversas gratuitas com o PandoraMind. Para continuar
+                desvendando os mistérios da mente com seu assistente, o acesso completo é liberado
+                de duas formas:
+              </p>
+              <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+                <a
+                  href={subscriptionLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
+                >
+                  <Sparkles className="h-5 w-5" /> Assinar acesso ilimitado
+                </a>
+                <Link to="/cursos" className="btn-outline">
+                  <GraduationCap className="h-5 w-5" /> Participar de um curso
+                </Link>
+              </div>
+              <p className="mt-4 text-xs text-ink-soft">
+                Alunos dos nossos cursos têm o assistente liberado. 💜
+              </p>
+            </div>
           </div>
-          <p className="mt-2 text-center text-xs text-ink-soft">
-            Ferramenta de apoio ao estudo · não substitui avaliação profissional · espaço seguro e
-            livre de preconceitos 🏳️‍🌈
-          </p>
-        </form>
+        ) : (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage(input);
+            }}
+            className="container-page max-w-3xl py-4"
+          >
+            <div className="flex items-end gap-2 rounded-2xl border-2 border-brand-300 bg-white p-2 shadow-card focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-100">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage(input);
+                  }
+                }}
+                rows={1}
+                placeholder="Escreva sua pergunta… (Enter para enviar)"
+                className="max-h-40 flex-1 resize-none bg-transparent px-3 py-2 text-ink outline-none placeholder:text-ink-soft"
+              />
+              <button type="submit" disabled={isLoading} className="btn-primary px-4 py-2.5">
+                <Send className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mt-2 text-center text-xs text-ink-soft">
+              Ferramenta de apoio ao estudo · não substitui avaliação profissional · espaço seguro e
+              livre de preconceitos 🏳️‍🌈
+            </p>
+          </form>
+        )}
       </div>
     </div>
   );
