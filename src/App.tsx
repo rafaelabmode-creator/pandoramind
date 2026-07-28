@@ -5,6 +5,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { Home } from "./pages/Home";
 import { Courses } from "./pages/Courses";
 import { CourseDetail } from "./pages/CourseDetail";
+import { Assistente } from "./pages/Assistente";
 import { NotFound } from "./pages/NotFound";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cursos" element={<Courses />} />
           <Route path="/cursos/:slug" element={<CourseDetail />} />
+          <Route path="/assistente" element={<Assistente />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

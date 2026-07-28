@@ -8,6 +8,7 @@ import { Logo } from "./Logo";
 const nav = [
   { label: "Início", to: "/" },
   { label: "Cursos", to: "/cursos" },
+  { label: "Assistente IA", to: "/assistente" },
 ];
 
 export function Header() {

@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node dev-server.mjs",
+    "dev:full": "concurrently -n frontend,backend -c magenta,cyan \"vite\" \"node dev-server.mjs\"",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },
@@ -20,6 +22,10 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.6.3",
