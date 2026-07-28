@@ -48,8 +48,8 @@ export function Home() {
               <Sparkles className="h-4 w-4" /> Cursos de Psicologia
             </span>
             <h1 className="text-4xl font-extrabold leading-[1.1] text-ink sm:text-5xl md:text-6xl">
-              Psicologia que faz{" "}
-              <span className="text-gradient">diferença na prática</span>
+              Abra a Caixa dos{" "}
+              <span className="text-gradient">Mistérios Mentais</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
               {site.mission}

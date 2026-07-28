@@ -47,7 +47,7 @@ export interface Course {
 export const INSTRUCTOR = {
   name: "Ráfa Modè",
   crp: "CRP 06/142235",
-  bio: "Psicóloga com 8 anos de experiência clínica e mais de 400 pacientes atendidos, que une formação técnica sólida à vivência pessoal como mulher trans.",
+  bio: "Psicóloga com 8 anos de experiência clínica e mais de 400 pacientes atendidos, que une formação técnica sólida a uma escuta acolhedora, ética e sem julgamentos.",
 };
 
 export const courses: Course[] = [

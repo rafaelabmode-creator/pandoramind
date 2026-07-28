@@ -6,7 +6,7 @@ export const site = {
   domain: "pandoramind.com.br",
   // Descrição curta do propósito da plataforma (aparece no hero).
   mission:
-    "Formação clínica em Psicologia — direta ao ponto, baseada em evidências e com prática de verdade. Para psicólogos que querem se aprofundar e para quem quer entender a mente humana.",
+    "Explore territórios inexplorados da psicologia e desvende os segredos da mente humana — em cursos diretos ao ponto, baseados em evidências, para psicólogos e para todos.",
   // WhatsApp para inscrições / lista de espera (troque pelo número oficial).
   whatsapp: "5516991215432",
   email: "contato@pandoramind.com.br",
