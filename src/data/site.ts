@@ -7,8 +7,8 @@ export const site = {
   // Descrição curta do propósito da plataforma (aparece no hero).
   mission:
     "Explore territórios inexplorados da psicologia e desvende os segredos da mente humana — em cursos diretos ao ponto, baseados em evidências, para psicólogos e para todos.",
-  // WhatsApp para inscrições / lista de espera (troque pelo número oficial).
-  whatsapp: "5516991215432",
+  // WhatsApp para inscrições / lista de espera (número oficial).
+  whatsapp: "5516981878887",
   email: "contato@pandoramind.com.br",
   instagram: "https://instagram.com/",
 };
