@@ -37,6 +37,11 @@ export interface Course {
   includes?: string[]; // "O que está incluído"
   ficha: FichaItem[]; // ficha técnica
 
+  modules?: { title: string; description: string }[]; // programa do curso (módulos)
+  faq?: { q: string; a: string }[]; // perguntas frequentes
+  guarantee?: string; // texto da garantia (ex.: 7 dias)
+  disclaimer?: string; // aviso ético (ex.: não substitui terapia)
+
   priceLots?: PriceLot[];
   priceNote?: string; // observação sobre preço
   paymentConditions?: string; // condições de pagamento
@@ -171,6 +176,132 @@ export const courses: Course[] = [
       "Lote promocional de lançamento nas primeiras vagas. As 12 horas com role-play e discussão de casos justificam esse patamar no mercado de educação continuada em psicologia.",
     paymentConditions: "Parcelamento em até 12x.",
     ctaLabel: "Entrar na lista de espera",
+  },
+
+  // --------------------------------------------------------------------------
+  // Curso 3 — Reescrevendo Sua História (público geral)
+  // --------------------------------------------------------------------------
+  {
+    slug: "reescrevendo-sua-historia",
+    title: "Reescrevendo Sua História",
+    subtitle: "Domine seus pensamentos, transforme suas emoções e recupere o controle da sua vida",
+    audience: "todos",
+    audienceLabel: "Para todos",
+    status: "inscricoes-abertas",
+    featured: true,
+    emoji: "✍️",
+    shortDescription:
+      "Um curso para quem se sente ansioso, preso a pensamentos negativos ou no piloto automático. Com base na terapia cognitiva, aprenda a identificar e transformar os pensamentos que moldam suas emoções — e reescreva sua história. Com apostila, planilhas, áudios de relaxamento e encontros ao vivo mensais.",
+    longParagraphs: [
+      "Você já sentiu que está preso aos mesmos pensamentos, repetindo padrões que te puxam para a ansiedade, o desânimo ou a autocrítica — como se a sua história já estivesse escrita? A boa notícia da ciência é: dá para reescrevê-la.",
+      "Reescrevendo Sua História é um curso para pessoas comuns (não é preciso ser da área) que querem entender a própria mente e retomar o controle das próprias emoções. Baseado na Terapia Cognitivo-Comportamental (TCC), ele traduz ferramentas científicas em passos simples e aplicáveis no dia a dia.",
+      "Em 8 módulos, com apostila digital, planilhas exclusivas, áudios de relaxamento e encontros ao vivo mensais, você aprende a observar seus pensamentos, questioná-los e construir formas mais saudáveis de sentir e agir. Sem fórmulas mágicas — com método, prática e acolhimento.",
+    ],
+    highlights: [
+      "Identificar pensamentos automáticos negativos em segundos",
+      "Reconhecer as distorções cognitivas que alimentam a ansiedade",
+      "Questionar e reestruturar crenças que te limitam",
+      "Usar técnicas práticas de regulação emocional no dia a dia",
+      "Aplicar exercícios de relaxamento para acalmar corpo e mente",
+      "Quebrar padrões de autossabotagem e procrastinação",
+      "Construir uma autoimagem mais gentil e realista",
+      "Criar um plano pessoal para manter os resultados a longo prazo",
+    ],
+    targetAudience: [
+      "Pessoas que convivem com ansiedade, preocupação excessiva ou desânimo e querem ferramentas práticas",
+      "Quem se sente preso a padrões negativos e à autocrítica e deseja mudar",
+      "Pessoas curiosas sobre como a mente funciona e como pensar de forma mais saudável",
+      "Quem busca autoconhecimento e desenvolvimento pessoal com base científica — sem precisar de formação em Psicologia",
+    ],
+    includes: [
+      "Apostila digital completa",
+      "Planilhas exclusivas de acompanhamento",
+      "Áudios de relaxamento guiado",
+      "Encontros ao vivo mensais",
+      "Certificado de conclusão",
+    ],
+    modules: [
+      {
+        title: "As bases da mente",
+        description:
+          "Entenda o modelo cognitivo: como pensamentos, emoções e comportamentos se conectam e por que isso abre a porta para a mudança.",
+      },
+      {
+        title: "Pensamentos automáticos: o roteiro invisível",
+        description:
+          "Aprenda a perceber os pensamentos rápidos e automáticos que passam despercebidos e ditam suas reações.",
+      },
+      {
+        title: "Distorções cognitivas: as armadilhas da mente",
+        description:
+          "Conheça as 'armadilhas' mais comuns (catastrofização, leitura mental, tudo-ou-nada) e como identificá-las em você.",
+      },
+      {
+        title: "Reestruturação cognitiva: questionando e reescrevendo",
+        description:
+          "Ferramentas práticas para questionar pensamentos disfuncionais e construir versões mais realistas e gentis.",
+      },
+      {
+        title: "Emoções sob nova luz",
+        description:
+          "Como acolher e regular emoções difíceis — ansiedade, tristeza, raiva — sem ser dominado por elas.",
+      },
+      {
+        title: "Crenças centrais: as raízes da sua história",
+        description:
+          "Descubra as crenças profundas sobre si, os outros e o mundo — e comece a reescrevê-las.",
+      },
+      {
+        title: "Da intenção à ação",
+        description:
+          "Estratégias para vencer a procrastinação, a evitação e os padrões que travam a sua mudança.",
+      },
+      {
+        title: "Sua nova história: mantendo os resultados",
+        description:
+          "Monte um plano pessoal de manutenção para seguir cuidando da sua mente muito além do curso.",
+      },
+    ],
+    ficha: [
+      { label: "Formato", value: "100% online" },
+      { label: "Estrutura", value: "8 módulos + encontros ao vivo mensais" },
+      { label: "Nível", value: "Aberto ao público — sem pré-requisitos" },
+      { label: "Materiais", value: "Apostila digital, planilhas e áudios de relaxamento" },
+      { label: "Certificação", value: "Certificado de conclusão" },
+    ],
+    guarantee:
+      "Garantia de 7 dias: se sentir que o curso não é para você, devolvemos 100% do valor, sem burocracia.",
+    disclaimer:
+      "Este é um curso educativo e de desenvolvimento pessoal, com base científica. Ele não substitui psicoterapia nem acompanhamento profissional. Se você estiver em sofrimento intenso, procure um(a) psicólogo(a); em situações de crise, ligue para o CVV (188).",
+    priceLots: [
+      { label: "Promocional", price: "R$ 297,00", deadline: "oferta de lançamento" },
+      { label: "Valor normal", price: "R$ 397,00" },
+    ],
+    priceNote: "Condição promocional de lançamento por tempo limitado.",
+    paymentConditions: "Parcelamento no cartão · pagamento via Asaas.",
+    faq: [
+      {
+        q: "Preciso ter formação em Psicologia?",
+        a: "Não! O curso foi feito para o público geral, com linguagem acessível e prática. Qualquer pessoa interessada em se conhecer melhor pode acompanhar.",
+      },
+      {
+        q: "O curso substitui a terapia?",
+        a: "Não. Ele é educativo e de desenvolvimento pessoal, com base científica, mas não substitui psicoterapia nem acompanhamento profissional. Em sofrimento intenso, buscar um(a) psicólogo(a) é fundamental.",
+      },
+      {
+        q: "Como acesso o conteúdo?",
+        a: "É 100% online. Você acessa a apostila, as planilhas e os áudios de forma digital e participa dos encontros ao vivo mensais.",
+      },
+      {
+        q: "Recebo certificado?",
+        a: "Sim, você recebe um certificado de conclusão ao final do curso.",
+      },
+      {
+        q: "E se eu não gostar?",
+        a: "Você tem 7 dias de garantia. Se sentir que não é para você, é só solicitar o reembolso e devolvemos 100% do valor.",
+      },
+    ],
+    ctaLabel: "Quero me inscrever",
   },
 ];
 

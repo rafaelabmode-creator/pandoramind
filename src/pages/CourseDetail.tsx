@@ -7,6 +7,9 @@ import {
   Package,
   Info,
   MessageCircle,
+  ListOrdered,
+  ShieldCheck,
+  HelpCircle,
 } from "lucide-react";
 import { getCourse, statusLabels } from "../data/courses";
 import { whatsappLink } from "../data/site";
@@ -86,7 +89,34 @@ export function CourseDetail() {
                 </p>
               ))}
             </div>
+            {course.disclaimer && (
+              <p className="mt-4 rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3 text-sm leading-relaxed text-ink-muted">
+                ⚠️ {course.disclaimer}
+              </p>
+            )}
           </section>
+
+          {/* Programa do curso (módulos) */}
+          {course.modules && course.modules.length > 0 && (
+            <section>
+              <h2 className="flex items-center gap-2 text-2xl font-extrabold text-ink">
+                <ListOrdered className="h-6 w-6 text-brand-600" /> Programa do curso
+              </h2>
+              <ol className="mt-4 space-y-3">
+                {course.modules.map((m, i) => (
+                  <li key={m.title} className="flex gap-4 rounded-xl border border-brand-100 bg-white p-4">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-ink">{m.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-ink-muted">{m.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           {/* O que você vai aprender */}
           <section>
@@ -133,6 +163,42 @@ export function CourseDetail() {
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+
+          {/* Garantia */}
+          {course.guarantee && (
+            <div className="flex items-start gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+              <ShieldCheck className="mt-0.5 h-7 w-7 shrink-0 text-emerald-600" />
+              <div>
+                <h3 className="font-bold text-ink">Garantia de satisfação</h3>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{course.guarantee}</p>
+              </div>
+            </div>
+          )}
+
+          {/* FAQ */}
+          {course.faq && course.faq.length > 0 && (
+            <section>
+              <h2 className="flex items-center gap-2 text-2xl font-extrabold text-ink">
+                <HelpCircle className="h-6 w-6 text-brand-600" /> Perguntas frequentes
+              </h2>
+              <div className="mt-4 space-y-3">
+                {course.faq.map((item) => (
+                  <details
+                    key={item.q}
+                    className="group rounded-xl border border-brand-100 bg-white p-4"
+                  >
+                    <summary className="flex cursor-pointer items-center justify-between gap-3 font-semibold text-ink marker:content-['']">
+                      {item.q}
+                      <span className="text-brand-500 transition-transform group-open:rotate-45">
+                        +
+                      </span>
+                    </summary>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-muted">{item.a}</p>
+                  </details>
+                ))}
+              </div>
             </section>
           )}
         </div>
