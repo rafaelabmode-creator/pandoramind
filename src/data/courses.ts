@@ -279,6 +279,7 @@ export const courses: Course[] = [
     ],
     priceNote: "Condição promocional de lançamento por tempo limitado.",
     paymentConditions: "Parcelamento no cartão · pagamento via Asaas.",
+    checkoutUrl: "https://www.asaas.com/c/c3akykrezir3sm9o",
     faq: [
       {
         q: "Preciso ter formação em Psicologia?",
