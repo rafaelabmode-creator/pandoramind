@@ -124,27 +124,54 @@ export async function handleChat(req, res) {
     generationConfig: { temperature: 0.85, topP: 0.95, maxOutputTokens: 8192 },
   };
 
-  let upstream;
-  try {
-    upstream = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-  } catch {
-    res.statusCode = 502;
-    return res.end(JSON.stringify({ error: "Falha ao conectar ao Gemini." }));
+  // Chama o Gemini com repetição automática em caso de sobrecarga temporária
+  // (503 UNAVAILABLE) ou limite de taxa (429). Erros diferentes não repetem.
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let upstream = null;
+  let lastStatus = 0;
+  let lastDetail = "";
+  const maxAttempts = 3;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    let resp;
+    try {
+      resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (err) {
+      lastStatus = 0;
+      lastDetail = String(err);
+      if (attempt < maxAttempts) {
+        await sleep(attempt * 800);
+        continue;
+      }
+      break;
+    }
+
+    if (resp.ok && resp.body) {
+      upstream = resp;
+      break;
+    }
+
+    lastStatus = resp.status;
+    lastDetail = await resp.text().catch(() => "");
+    // Só repete quando faz sentido (sobrecarga/limite temporário).
+    if (resp.status !== 503 && resp.status !== 429) break;
+    if (attempt < maxAttempts) await sleep(attempt * 800);
   }
 
-  if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => "");
-    console.error("Erro do Gemini:", upstream.status, detail);
+  if (!upstream) {
+    console.error("Erro do Gemini:", lastStatus, lastDetail);
+    const friendly =
+      lastStatus === 503 || lastStatus === 429
+        ? "O assistente está com muita procura neste momento. 🙏 Tente novamente em alguns instantes."
+        : lastStatus === 0
+          ? "Não consegui falar com o assistente agora. Verifique sua conexão e tente de novo."
+          : `A API do Gemini respondeu com erro (${lastStatus}). Verifique a chave e o modelo.`;
     res.statusCode = 502;
-    return res.end(
-      JSON.stringify({
-        error: `A API do Gemini respondeu com erro (${upstream.status}). Verifique a chave e o modelo.`,
-      }),
-    );
+    return res.end(JSON.stringify({ error: friendly }));
   }
 
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
